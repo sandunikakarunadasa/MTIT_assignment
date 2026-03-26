@@ -3,6 +3,7 @@ import { getMenu, toggleMenuItemAvailability, deleteMenuItem } from '../services
 import MenuItemCard from '../components/MenuItemCard';
 import MenuItemModal from '../components/modals/MenuItemModal';
 import ConfirmModal from '../components/modals/ConfirmModal';
+import { ArrowLeft, UtensilsCrossed } from 'lucide-react';
 
 export default function MenuPage({ restaurant, onBack }) {
   const [menu, setMenu] = useState([]);
@@ -34,8 +35,8 @@ export default function MenuPage({ restaurant, onBack }) {
 
   return (
     <div className="container">
-      <button className="btn btn-ghost back-btn" onClick={onBack}>
-        ← Back to Restaurants
+      <button className="btn btn-ghost back-btn" onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <ArrowLeft size={16} /> Back to Restaurants
       </button>
 
       <div className="menu-info">
@@ -54,7 +55,7 @@ export default function MenuPage({ restaurant, onBack }) {
 
       {menu.length === 0 ? (
         <div className="empty-state">
-          <div className="icon">🍽️</div>
+          <div className="icon"><UtensilsCrossed size={48} color="var(--text-muted)" /></div>
           <h3>No menu items yet</h3>
           <p>Add your first item to get started.</p>
         </div>

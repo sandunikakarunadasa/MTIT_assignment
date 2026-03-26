@@ -1,4 +1,5 @@
 import React from 'react';
+import { MapPin, Phone, Utensils } from 'lucide-react';
 
 export default function RestaurantCard({ restaurant, onManageMenu, onEdit, onToggle, onDelete }) {
   const { _id, name, address, cuisine, contact, isOpen, menu } = restaurant;
@@ -8,7 +9,9 @@ export default function RestaurantCard({ restaurant, onManageMenu, onEdit, onTog
       <div className="card-header">
         <div>
           <p className="card-title">{name}</p>
-          <p className="card-sub">📍 {address}</p>
+          <p className="card-sub" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <MapPin size={14} /> {address}
+          </p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-end' }}>
           <span className="badge badge-cuisine">{cuisine}</span>
@@ -19,9 +22,9 @@ export default function RestaurantCard({ restaurant, onManageMenu, onEdit, onTog
       </div>
 
       <div className="card-body">
-        {contact && <p className="card-sub">📞 {contact}</p>}
-        <p className="card-sub" style={{ marginTop: '0.4rem' }}>
-          🍽️ {menu?.length || 0} menu items
+        {contact && <p className="card-sub" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Phone size={14} /> {contact}</p>}
+        <p className="card-sub" style={{ marginTop: '0.4rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <Utensils size={14} /> {menu?.length || 0} menu items
         </p>
       </div>
 

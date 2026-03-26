@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllRestaurants, searchRestaurants, getMenu } from '../services/api';
+import { ArrowLeft, Phone, UtensilsCrossed, ShoppingCart, Search, MapPin, Utensils } from 'lucide-react';
 
 function CustomerMenuView({ restaurant, onBack }) {
   const [menu, setMenu] = useState([]);
@@ -10,19 +11,21 @@ function CustomerMenuView({ restaurant, onBack }) {
 
   return (
     <div className="container">
-      <button className="btn btn-ghost back-btn" onClick={onBack}>← Back to Restaurants</button>
+      <button className="btn btn-ghost back-btn" onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <ArrowLeft size={16} /> Back to Restaurants
+      </button>
 
       <div className="menu-info">
         <h2 style={{ fontWeight: 800 }}>{restaurant.name}</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
           {restaurant.cuisine} · {restaurant.address}
         </p>
-        {restaurant.contact && <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>📞 {restaurant.contact}</p>}
+        {restaurant.contact && <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}><Phone size={14} /> {restaurant.contact}</p>}
       </div>
 
       {menu.length === 0 ? (
         <div className="empty-state">
-          <div className="icon">🍽️</div>
+          <div className="icon"><UtensilsCrossed size={48} color="var(--text-muted)" /></div>
           <h3>No menu items yet</h3>
           <p>This restaurant hasn't added any items yet.</p>
         </div>
@@ -41,8 +44,8 @@ function CustomerMenuView({ restaurant, onBack }) {
                 </span>
               )}
               {/* TODO: Connect "Add to Cart" to Order Service */}
-              <button className="btn btn-primary" style={{ width: '100%', marginTop: '0.75rem' }}>
-                🛒 Add to Order
+              <button className="btn btn-primary" style={{ width: '100%', marginTop: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <ShoppingCart size={16} /> Add to Order
               </button>
             </div>
           ))}
@@ -82,7 +85,7 @@ export default function CustomerView() {
       <div className="page-header">
         <h2>Order Food</h2>
         <div className="search-bar">
-          <span>🔍</span>
+          <Search size={18} color="var(--text-muted)" />
           <input
             placeholder="Search restaurants or cuisine…"
             value={search}
@@ -93,7 +96,7 @@ export default function CustomerView() {
 
       {restaurants.length === 0 ? (
         <div className="empty-state">
-          <div className="icon">🍽️</div>
+          <div className="icon"><UtensilsCrossed size={48} color="var(--text-muted)" /></div>
           <h3>No open restaurants</h3>
           <p>Check back later!</p>
         </div>
@@ -104,7 +107,7 @@ export default function CustomerView() {
               <div className="card-header">
                 <div>
                   <p className="card-title">{r.name}</p>
-                  <p className="card-sub">📍 {r.address}</p>
+                  <p className="card-sub" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={14} /> {r.address}</p>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-end' }}>
                   <span className="badge badge-cuisine">{r.cuisine}</span>
@@ -112,7 +115,7 @@ export default function CustomerView() {
                 </div>
               </div>
               <div className="card-body">
-                <p className="card-sub">🍽️ {r.menu?.length || 0} items available</p>
+                <p className="card-sub" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Utensils size={14} /> {r.menu?.length || 0} items available</p>
               </div>
               <div className="card-footer">
                 <button className="btn btn-primary btn-sm">View Menu →</button>

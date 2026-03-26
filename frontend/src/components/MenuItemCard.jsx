@@ -1,4 +1,5 @@
 import React from 'react';
+import { Edit2, Trash2, RefreshCw } from 'lucide-react';
 
 export default function MenuItemCard({ item, onEdit, onDelete, onToggle }) {
   return (
@@ -23,9 +24,9 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggle }) {
         </div>
 
         <div style={{ display: 'flex', gap: '0.4rem' }}>
-          <button className="btn btn-sm btn-warning" title="Toggle availability" onClick={() => onToggle(item._id)}>⇄</button>
-          <button className="btn btn-sm btn-ghost" title="Edit item" onClick={() => onEdit(item)}>✏️</button>
-          <button className="btn btn-sm btn-danger" title="Delete item" onClick={() => onDelete(item)}>🗑️</button>
+          <button className="btn btn-sm btn-warning" title="Toggle availability" onClick={() => onToggle(item._id)}><RefreshCw size={14} /></button>
+          <button className="btn btn-sm btn-ghost" title="Edit item" onClick={() => onEdit(item)}><Edit2 size={14} /></button>
+          <button className="btn btn-sm btn-danger" title="Delete item" onClick={() => onDelete(item)}><Trash2 size={14} /></button>
         </div>
       </div>
     </div>
