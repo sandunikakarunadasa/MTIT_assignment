@@ -3,6 +3,7 @@ import { getAllRestaurants, searchRestaurants, toggleRestaurantStatus, deleteRes
 import RestaurantCard from '../components/RestaurantCard';
 import RestaurantModal from '../components/modals/RestaurantModal';
 import ConfirmModal from '../components/modals/ConfirmModal';
+import { Search, Store } from 'lucide-react';
 
 export default function RestaurantListPage({ onManageMenu }) {
   const [restaurants, setRestaurants] = useState([]);
@@ -44,7 +45,7 @@ export default function RestaurantListPage({ onManageMenu }) {
         <h2>Restaurants</h2>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
           <div className="search-bar">
-            <span>🔍</span>
+            <Search size={18} color="var(--text-muted)" />
             <input
               placeholder="Search by name or cuisine…"
               value={search}
@@ -59,7 +60,7 @@ export default function RestaurantListPage({ onManageMenu }) {
 
       {restaurants.length === 0 ? (
         <div className="empty-state">
-          <div className="icon">🏪</div>
+          <div className="icon"><Store size={48} color="var(--text-muted)" /></div>
           <h3>No restaurants found</h3>
           <p>Add a restaurant to get started.</p>
         </div>
