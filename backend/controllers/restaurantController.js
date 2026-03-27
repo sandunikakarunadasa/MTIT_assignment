@@ -77,16 +77,4 @@ exports.deleteRestaurant = async (req, res) => {
   }
 };
 
-// @desc    Toggle restaurant open/closed status
-// @route   PATCH /api/restaurants/:id/toggle
-exports.toggleStatus = async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findById(req.params.id);
-    if (!restaurant) return res.status(404).json({ success: false, message: 'Restaurant not found' });
-    restaurant.isOpen = !restaurant.isOpen;
-    await restaurant.save();
-    res.status(200).json({ success: true, data: restaurant });
-  } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
+

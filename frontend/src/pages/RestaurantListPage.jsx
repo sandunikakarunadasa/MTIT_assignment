@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllRestaurants, searchRestaurants, toggleRestaurantStatus, deleteRestaurant } from '../services/api';
+import { getAllRestaurants, searchRestaurants, deleteRestaurant } from '../services/api';
 import RestaurantCard from '../components/RestaurantCard';
 import RestaurantModal from '../components/modals/RestaurantModal';
 import ConfirmModal from '../components/modals/ConfirmModal';
@@ -27,11 +27,6 @@ export default function RestaurantListPage({ onManageMenu }) {
     const timer = setTimeout(fetchRestaurants, 300);
     return () => clearTimeout(timer);
   }, [search]);
-
-  const handleToggle = async (id) => {
-    await toggleRestaurantStatus(id);
-    fetchRestaurants();
-  };
 
   const handleDelete = async () => {
     await deleteRestaurant(deleteTarget._id);
@@ -72,7 +67,6 @@ export default function RestaurantListPage({ onManageMenu }) {
               restaurant={r}
               onManageMenu={onManageMenu}
               onEdit={setEditTarget}
-              onToggle={handleToggle}
               onDelete={setDeleteTarget}
             />
           ))}
