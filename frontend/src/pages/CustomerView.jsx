@@ -4,10 +4,39 @@ import { ArrowLeft, Phone, UtensilsCrossed, ShoppingCart, Search, MapPin, Utensi
 
 function CustomerMenuView({ restaurant, onBack }) {
   const [menu, setMenu] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedAddons, setSelectedAddons] = useState({});
 
   useEffect(() => {
-    getMenu(restaurant._id).then(res => setMenu(res.data.data)).catch(console.error);
+    getMenu(restaurant._id).then(res => {
+      setMenu(res.data.data);
+      setLoading(false);
+    }).catch(console.error);
   }, [restaurant._id]);
+
+  const openCustomizeModal = (item) => {
+    setSelectedItem(item);
+    const initialReq = {};
+    item.addons?.forEach(a => { if (a.isRequired) initialReq[a._id] = true; });
+    setSelectedAddons(initialReq);
+  };
+
+  const handleToggleAddon = (addon) => {
+    if (addon.isRequired) return; // Prevent toggling required
+    setSelectedAddons(prev => ({ ...prev, [addon._id]: !prev[addon._id] }));
+  };
+
+  const getComputedPrice = () => {
+    if (!selectedItem) return 0;
+    let total = selectedItem.price;
+    selectedItem.addons?.forEach(a => {
+      if (selectedAddons[a._id]) total += a.additionalPrice;
+    });
+    return total;
+  };
+
+  if (loading) return <div className="container" style={{ padding: '2rem', textAlign: 'center' }}>Loading menu...</div>;
 
   return (
     <div className="container">
@@ -33,22 +62,76 @@ function CustomerMenuView({ restaurant, onBack }) {
         <div className="menu-grid">
           {menu.filter(item => item.isAvailable).map(item => (
             <div key={item._id} className="menu-card">
-              <div className="menu-card-top">
-                <span className="menu-card-name">{item.name}</span>
-                <span className="menu-card-price">Rs. {item.price}</span>
+                {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="menu-card-img" />}
+                <div className="menu-card-top">
+                  <span className="menu-card-name">{item.name}</span>
+                  <span className="menu-card-price">Rs. {item.price}</span>
+                </div>
+                {item.description && <p className="menu-card-desc">{item.description}</p>}
+                {item.category && (
+                  <span className="badge badge-cuisine" style={{ alignSelf: 'flex-start', marginTop: '0.4rem' }}>
+                    {item.category}
+                  </span>
+                )}
+                <button className="btn btn-primary" onClick={() => openCustomizeModal(item)} style={{ width: '100%', marginTop: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <ShoppingCart size={16} /> Add to Order
+                </button>
               </div>
-              {item.description && <p className="menu-card-desc">{item.description}</p>}
-              {item.category && (
-                <span className="badge badge-cuisine" style={{ marginTop: '0.4rem', display: 'inline-block' }}>
-                  {item.category}
-                </span>
-              )}
-              {/* TODO: Connect "Add to Cart" to Order Service */}
-              <button className="btn btn-primary" style={{ width: '100%', marginTop: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <ShoppingCart size={16} /> Add to Order
+          ))}
+        </div>
+      )}
+
+      {selectedItem && (
+        <div className="modal-backdrop">
+          <div className="modal-content" style={{ maxWidth: '500px' }}>
+            <div className="modal-header">
+              <h3>Customize Order: {selectedItem.name}</h3>
+              <button className="btn btn-ghost btn-sm" onClick={() => setSelectedItem(null)}>✕</button>
+            </div>
+            
+            <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {selectedItem.imageUrl && <img src={selectedItem.imageUrl} alt={selectedItem.name} style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '8px' }} />}
+              <p style={{ color: 'var(--text-muted)' }}>{selectedItem.description}</p>
+              
+              <div style={{ background: 'var(--bg)', padding: '1rem', borderRadius: '8px' }}>
+                <h4 style={{ marginBottom: '0.75rem', fontSize: '1.1rem' }}>Add-ons</h4>
+                {!selectedItem.addons || selectedItem.addons.length === 0 ? (
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No add-ons available for this item.</p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {selectedItem.addons.map(addon => (
+                      <label key={addon._id || addon.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: addon.isRequired ? 'not-allowed' : 'pointer', opacity: addon.isRequired ? 0.7 : 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <input 
+                            type="checkbox" 
+                            checked={!!selectedAddons[addon._id]} 
+                            onChange={() => handleToggleAddon(addon)}
+                            disabled={addon.isRequired}
+                          />
+                          <span>{addon.name} {addon.isRequired && <span style={{ color: 'var(--primary)', fontSize: '0.8rem', marginLeft: '4px' }}>(Required)</span>}</span>
+                        </div>
+                        <span style={{ fontWeight: 600 }}>+ Rs. {addon.additionalPrice}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="modal-footer" style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem', marginTop: '1rem' }}>
+              <button 
+                className="btn btn-primary" 
+                style={{ width: '100%', display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', fontSize: '1.1rem' }}
+                onClick={() => {
+                  alert(`Added to cart! Total: Rs. ${getComputedPrice()}`);
+                  setSelectedItem(null);
+                }}
+              >
+                <span>Add 1 to Cart</span>
+                <span>Rs. {getComputedPrice()}</span>
               </button>
             </div>
-          ))}
+          </div>
         </div>
       )}
     </div>

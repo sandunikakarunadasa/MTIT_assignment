@@ -4,6 +4,7 @@ import { Edit2, Trash2, RefreshCw } from 'lucide-react';
 export default function MenuItemCard({ item, onEdit, onDelete, onToggle }) {
   return (
     <div className="menu-card">
+      {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="menu-card-img" />}
       <div className="menu-card-top">
         <span className="menu-card-name">{item.name}</span>
         <span className="menu-card-price">Rs. {item.price}</span>

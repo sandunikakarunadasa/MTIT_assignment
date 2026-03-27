@@ -1,11 +1,12 @@
 import React from 'react';
 import { MapPin, Phone, Utensils } from 'lucide-react';
 
-export default function RestaurantCard({ restaurant, onManageMenu, onEdit, onToggle, onDelete }) {
-  const { _id, name, address, cuisine, contact, isOpen, menu } = restaurant;
+export default function RestaurantCard({ restaurant, onManageMenu, onEdit, onDelete }) {
+  const { _id, name, address, cuisine, contact, isOpen, menu, imageUrl } = restaurant;
 
   return (
     <div className="card">
+      {imageUrl && <img src={imageUrl} alt={name} className="card-img" />}
       <div className="card-header">
         <div>
           <p className="card-title">{name}</p>
@@ -34,9 +35,6 @@ export default function RestaurantCard({ restaurant, onManageMenu, onEdit, onTog
         </button>
         <button className="btn btn-sm btn-ghost" onClick={() => onEdit(restaurant)}>
           Edit
-        </button>
-        <button className="btn btn-sm btn-warning" onClick={() => onToggle(_id)}>
-          {isOpen ? 'Close' : 'Open'}
         </button>
         <button className="btn btn-sm btn-danger" onClick={() => onDelete(restaurant)}>
           Delete

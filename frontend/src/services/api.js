@@ -11,7 +11,11 @@ export const getRestaurant = (id) => api.get(`/${id}`);
 export const createRestaurant = (data) => api.post('/', data);
 export const updateRestaurant = (id, data) => api.put(`/${id}`, data);
 export const deleteRestaurant = (id) => api.delete(`/${id}`);
-export const toggleRestaurantStatus = (id) => api.patch(`/${id}/toggle`);
+
+// ── Images ───────────────────────────────────────────────
+export const uploadImage = (formData) => api.post('http://localhost:8000/restaurant/api/upload', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
 
 // ── Menu ─────────────────────────────────────────────────
 export const getMenu = (restaurantId) => api.get(`/${restaurantId}/menu`);

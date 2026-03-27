@@ -7,8 +7,7 @@ const {
   getRestaurant,
   createRestaurant,
   updateRestaurant,
-  deleteRestaurant,
-  toggleStatus
+  deleteRestaurant
 } = require('../controllers/restaurantController');
 
 const {
@@ -32,7 +31,7 @@ router.route('/:id')
   .put(updateRestaurant)
   .delete(deleteRestaurant);
 
-router.patch('/:id/toggle', toggleStatus);
+
 
 // Menu routes (nested under restaurant)
 router.route('/:id/menu')
